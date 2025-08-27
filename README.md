@@ -1,4 +1,4 @@
-# 3D Car Platformer Prototype
+# FlipShift
 
 ## Project Overview
 
