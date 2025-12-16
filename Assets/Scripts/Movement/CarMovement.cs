@@ -62,7 +62,11 @@ public class CarMovement : MonoBehaviour
         Steer();
         Brake();
         CustomGravity();
-        //InAir();
+
+        if (!IsGrounded())
+        {
+            InAir();
+        }
 
         velocityUI.text = carRb.linearVelocity.magnitude.ToString("F0");
     }
@@ -77,6 +81,15 @@ public class CarMovement : MonoBehaviour
 
     void Move()
     {
+        if (!IsGrounded())
+        {
+            // No motor torque in air
+            foreach (var wheel in wheels)
+                wheel.wheelCollider.motorTorque = 0f;
+
+            return;
+        }
+
         float totalWheelRPM = 0;
         int driveWheelCount = 0;
 
@@ -134,7 +147,7 @@ public class CarMovement : MonoBehaviour
                     wheel.wheelCollider.brakeTorque = 300 * brakeAcceleration * Time.deltaTime;
                 }
             }
-            Debug.Log("brakes!");
+            Debug.Log("Brakes!");
         }
         else
         {
@@ -175,7 +188,9 @@ public class CarMovement : MonoBehaviour
                 return true;
             }
         }
+        Debug.Log("Grounded");
         return false;
+        
     }
 
     void Jump()
@@ -201,20 +216,20 @@ public class CarMovement : MonoBehaviour
 
     //}
 
-    //void InAir()
-    //{
-    //    // We only want to dampen the Z-axis rotation
-    //    // Get the current angular velocity on the Z axis
-    //    float currentZVelocity = carRb.angularVelocity.z;
-    //    float currentXVelocity = carRb.angularVelocity.x;
+    void InAir()
+    {
+        // We only want to dampen the Z-axis rotation
+        // Get the current angular velocity on the Z axis
+        float currentZVelocity = carRb.angularVelocity.z;
+        float currentXVelocity = carRb.angularVelocity.x;
 
-    //    // Calculate the damping torque. It's the negative of the current velocity
-    //    // multiplied by our damping factor.
-    //    float dampingTorqueZ = -currentZVelocity * dampingFactor;
-    //    float dampingTorqueX = -currentXVelocity * dampingFactor;
+        // Calculate the damping torque. It's the negative of the current velocity
+        // multiplied by our damping factor.
+        float dampingTorqueZ = -currentZVelocity * dampingFactor;
+        float dampingTorqueX = -currentXVelocity * dampingFactor;
 
-    //    // Apply this torque on the Z axis.
-    //    // We use ForceMode.Acceleration to ignore the object's mass for a more direct damping effect.
-    //    carRb.AddTorque(dampingTorqueX, 0, dampingTorqueZ, ForceMode.Acceleration);
-    //}
+        // Apply this torque on the Z axis.
+        // We use ForceMode.Acceleration to ignore the object's mass for a more direct damping effect.
+        carRb.AddTorque(dampingTorqueX, 0, dampingTorqueZ, ForceMode.Acceleration);
+    }
 }
