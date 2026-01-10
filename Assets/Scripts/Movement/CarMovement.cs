@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class CarMovement : MonoBehaviour
 {
+    public CarBaseState currentState;
+    public AirState airState = new AirState();
+    public GroundState onGroundState = new GroundState();
+    public GameObject steeringWheel;
     public enum Axel
     {
         Front,
@@ -18,33 +22,35 @@ public class CarMovement : MonoBehaviour
         public Axel axel;
     }
 
-    [SerializeField] private float maxAcceleration;
-    [SerializeField] private float brakeAcceleration;
-    [SerializeField] private float turnSensitivity;
-    [SerializeField] private float maxSteerAngle;
+    [SerializeField] public float maxAcceleration;
+    [SerializeField] public float brakeAcceleration;
+    [SerializeField] public float turnSensitivity;
+    [SerializeField] public float maxSteerAngle;
+                     
+    [SerializeField] public List<Wheel> wheels;
+    [SerializeField] public TMPro.TextMeshProUGUI velocityUI;
+    [SerializeField] public TMPro.TextMeshProUGUI State;
+    [SerializeField] public AnimationCurve torqueCurve;
+    [SerializeField] public float maxRPM = 5000f;
+    [SerializeField] public Vector3 customGravityDirection = new Vector3(0f, -9.81f, 0f);
+    [SerializeField] public float gravityMultiplier = 1.2f;
+    [SerializeField] public float jumpForce = 60000f;
+    [SerializeField] public float topSpeed = 20f;
+    [SerializeField] public float dampingFactor= 5f;
 
-    [SerializeField] private List<Wheel> wheels;
-    [SerializeField] private TMPro.TextMeshProUGUI velocityUI;
-    [SerializeField] private AnimationCurve torqueCurve;
-    [SerializeField] private float maxRPM = 5000f;
-
-    [SerializeField] private Vector3 customGravityDirection = new Vector3(0f, -9.81f, 0f);
-    [SerializeField] private float gravityMultiplier = 1.2f;
-    [SerializeField] private float jumpForce = 60000f;
-    [SerializeField] private float topSpeed = 20f;
-    [SerializeField] private float dampingFactor= 5f;
 
 
+    public float moveInput;
+    public float steerInput;
+    public bool jumpInput;
+    public bool brakeInput;
 
-    float moveInput;
-    float steerInput;
-    bool jumpInput;
-    bool brakeInput;
-
-    private Rigidbody carRb;
+    public Rigidbody carRb;
 
     void Start()
     {
+        currentState = onGroundState;
+        currentState.EnterState(this);
         carRb = GetComponent<Rigidbody>();
         carRb.useGravity = false;
     }
@@ -57,18 +63,10 @@ public class CarMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        Move();
-        Jump();
-        Steer();
-        Brake();
+        currentState.UpdateState(this);
         CustomGravity();
-
-        if (!IsGrounded())
-        {
-            InAir();
-        }
-
         velocityUI.text = carRb.linearVelocity.magnitude.ToString("F0");
+        State.text = currentState.ToString();
     }
 
     void GetInputs()
@@ -79,17 +77,8 @@ public class CarMovement : MonoBehaviour
         jumpInput = CarMotor.Instance.JumpInput;
     }
 
-    void Move()
+    public void Move()
     {
-        if (!IsGrounded())
-        {
-            // No motor torque in air
-            foreach (var wheel in wheels)
-                wheel.wheelCollider.motorTorque = 0f;
-
-            return;
-        }
-
         float totalWheelRPM = 0;
         int driveWheelCount = 0;
 
@@ -124,7 +113,7 @@ public class CarMovement : MonoBehaviour
 
     }
 
-    void Steer()
+    public void Steer()
     {
         foreach (var wheel in wheels)
         {
@@ -136,7 +125,7 @@ public class CarMovement : MonoBehaviour
         }
     }
 
-    void Brake()
+    public void Brake()
     {
         if (brakeInput)
         {
@@ -147,7 +136,6 @@ public class CarMovement : MonoBehaviour
                     wheel.wheelCollider.brakeTorque = 300 * brakeAcceleration * Time.deltaTime;
                 }
             }
-            Debug.Log("Brakes!");
         }
         else
         {
@@ -158,7 +146,7 @@ public class CarMovement : MonoBehaviour
         }
     }
 
-    void AnimatedWheels()
+    public void AnimatedWheels()
     {
         foreach (var wheel in wheels)
         {
@@ -169,9 +157,11 @@ public class CarMovement : MonoBehaviour
             wheel.wheelModel.transform.rotation = rot;
 
         }
+
+
     }
 
-    void CustomGravity()
+    public void CustomGravity()
     {
         if (carRb != null)
         {
@@ -179,7 +169,7 @@ public class CarMovement : MonoBehaviour
         }
     }
 
-    bool IsGrounded()
+    public bool IsGrounded()
     {
         foreach (Wheel wheel in wheels)
         {
@@ -188,36 +178,21 @@ public class CarMovement : MonoBehaviour
                 return true;
             }
         }
-        Debug.Log("Grounded");
+        //Debug.Log("In Air");
         return false;
         
     }
 
-    void Jump()
+
+
+    public void InAir()
     {
-        if (jumpInput & IsGrounded())
+        foreach(var wheel in wheels)
         {
-            carRb.AddForce(0, jumpForce, 0, ForceMode.Impulse);
-            Debug.Log("jump!");
-            jumpInput = false;
+            wheel.wheelCollider.motorTorque = 0f;
         }
-    }
 
-    //void InAir()
-    //{
-    //    if (!IsGrounded())
-    //    {
-    //        carRb.constraints = RigidbodyConstraints.FreezeRotationZ;
-    //    }
-    //    else
-    //    {
-    //        carRb.freezeRotation = false;
-    //    }
-
-    //}
-
-    void InAir()
-    {
+        Debug.Log("Angular velocity dampening");
         // We only want to dampen the Z-axis rotation
         // Get the current angular velocity on the Z axis
         float currentZVelocity = carRb.angularVelocity.z;
@@ -231,5 +206,11 @@ public class CarMovement : MonoBehaviour
         // Apply this torque on the Z axis.
         // We use ForceMode.Acceleration to ignore the object's mass for a more direct damping effect.
         carRb.AddTorque(dampingTorqueX, 0, dampingTorqueZ, ForceMode.Acceleration);
+    }
+
+    public void SwitchState(CarBaseState state)
+    {
+        currentState = state;
+        state.EnterState(this);
     }
 }
