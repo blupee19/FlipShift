@@ -7,6 +7,7 @@ public class AirState : CarBaseState
     public override void EnterState(CarMovement car)
     {
         Debug.Log("Car is in the air");
+
     }
 
     public override void UpdateState(CarMovement car)

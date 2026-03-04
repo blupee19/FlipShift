@@ -8,6 +8,7 @@ public class CarMovement : MonoBehaviour
     public AirState airState = new AirState();
     public GroundState onGroundState = new GroundState();
     public GameObject steeringWheel;
+    public bool canJump = false;
     public enum Axel
     {
         Front,
@@ -117,7 +118,7 @@ public class CarMovement : MonoBehaviour
     {
         foreach (var wheel in wheels)
         {
-            if (wheel.axel == Axel.Front)
+            if (wheel.axel == Axel.Front) //remove this to make it interesting
             {
                 var _steerAngle = steerInput * turnSensitivity * maxSteerAngle;
                 wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);
