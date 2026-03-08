@@ -16,16 +16,19 @@ public class CarMotor : MonoBehaviour
     [SerializeField] private string steer = "Steer";
     [SerializeField] private string handbrake = "Handbrake";
     [SerializeField] private string jump = "Jump";
+    //[SerializeField] private string airManuever = "AirManuever";
 
     private InputAction accelerateAction;
     private InputAction steerAction;
     private InputAction handbrakeAction;
     private InputAction jumpAction;
+    //private InputAction airManueverAction;
 
     public float AccelerateInput { get; private set; }
     public float SteerInput { get; private set; }
     public bool HandbrakeInput { get; private set; }
     public bool JumpInput { get; set; }
+    //public bool AirManuever { get; set; }
 
     public static CarMotor Instance { get; private set; }
 
@@ -46,6 +49,7 @@ public class CarMotor : MonoBehaviour
         steerAction = inputActions.FindActionMap(actionMapName).FindAction(steer);
         handbrakeAction = inputActions.FindActionMap(actionMapName).FindAction(handbrake);
         jumpAction = inputActions.FindActionMap(actionMapName).FindAction(jump);
+        //airManueverAction = inputActions.FindActionMap(actionMapName).FindAction(airManuever);
         RegisterInputActions();
     }
 
@@ -62,6 +66,9 @@ public class CarMotor : MonoBehaviour
 
         jumpAction.performed += context => JumpInput = true;
         jumpAction.canceled += context => JumpInput = false;
+
+        //airManueverAction.performed += context => AirManuever = true;
+        //airManueverAction.canceled += context => AirManuever = false;
     }
 
     private void OnEnable()
@@ -70,6 +77,7 @@ public class CarMotor : MonoBehaviour
         steerAction.Enable();   
         handbrakeAction.Enable();
         jumpAction.Enable();
+        //airManueverAction.Enable();
     }
 
     private void OnDisable()
@@ -78,6 +86,7 @@ public class CarMotor : MonoBehaviour
         steerAction.Disable();
         handbrakeAction.Disable();
         jumpAction.Disable();
+        //airManueverAction.Disable();
     }
 
 

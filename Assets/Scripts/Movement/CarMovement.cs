@@ -45,6 +45,7 @@ public class CarMovement : MonoBehaviour
     public float steerInput;
     public bool jumpInput;
     public bool brakeInput;
+    // public bool airManueverInput;
 
     public Rigidbody carRb;
 
@@ -72,10 +73,13 @@ public class CarMovement : MonoBehaviour
 
     void GetInputs()
     {
+        if (CarMotor.Instance == null) return;
+
         moveInput = CarMotor.Instance.AccelerateInput;
         steerInput = CarMotor.Instance.SteerInput;
         brakeInput = CarMotor.Instance.HandbrakeInput;
         jumpInput = CarMotor.Instance.JumpInput;
+        // airManueverInput = CarMotor.Instance.AirManuever;
     }
 
     public void Move()
@@ -193,7 +197,7 @@ public class CarMovement : MonoBehaviour
             wheel.wheelCollider.motorTorque = 0f;
         }
 
-        Debug.Log("Angular velocity dampening");
+        // Debug.Log("Angular velocity dampening");
         // We only want to dampen the Z-axis rotation
         // Get the current angular velocity on the Z axis
         float currentZVelocity = carRb.angularVelocity.z;

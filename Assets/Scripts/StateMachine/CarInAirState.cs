@@ -7,11 +7,12 @@ public class AirState : CarBaseState
     public override void EnterState(CarMovement car)
     {
         Debug.Log("Car is in the air");
-
+        //CarMotor.Instance.JumpInput = false;
     }
 
     public override void UpdateState(CarMovement car)
     {
+        Debug.Log("AirState Update");
         car.InAir();
         car.Steer();
         
@@ -22,10 +23,9 @@ public class AirState : CarBaseState
 
         if (car.jumpInput)
         {
-            Debug.Log("Shift Held");
+            Debug.Log("Torque!!!");
             float pitchTorque = car.moveInput * pitchForce;
             car.carRb.AddRelativeTorque(Vector3.right * pitchTorque, ForceMode.Acceleration);
-
         }
 
     }

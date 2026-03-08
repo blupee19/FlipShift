@@ -5,6 +5,7 @@ public class GroundState : CarBaseState
     public override void EnterState(CarMovement car)
     {
         Debug.Log("Car has entered grounded state");
+        CarMotor.Instance.JumpInput = false;
     }
 
     public override void UpdateState(CarMovement car)
@@ -17,7 +18,7 @@ public class GroundState : CarBaseState
         if (car.jumpInput)
         {
             car.carRb.AddForce(Vector3.up * car.jumpForce, ForceMode.Impulse);
-            car.jumpInput = false;
+            //car.jumpInput = false;
         }
 
         if (!car.IsGrounded())

@@ -929,6 +929,7 @@ GameObject:
   - component: {fileID: 542006173}
   - component: {fileID: 542006172}
   - component: {fileID: 542006176}
+  - component: {fileID: 542006177}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -1086,6 +1087,18 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
+--- !u!114 &542006177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542006171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 728e4b9565f50a84eb37e53f36e41f6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &579783332
 GameObject:
   m_ObjectHideFlags: 0
@@ -1396,6 +1409,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   steeringWheel: {fileID: 883910226}
+  canJump: 0
   maxAcceleration: 1200
   brakeAcceleration: 600
   turnSensitivity: 1
