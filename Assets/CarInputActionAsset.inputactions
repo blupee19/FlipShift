@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "AirManuever",
+                    "name": "Restart",
                     "type": "Button",
                     "id": "479843c8-98aa-4a08-a170-716bea3fe9db",
                     "expectedControlType": "",
@@ -143,11 +143,11 @@
                 {
                     "name": "",
                     "id": "1dbb36ed-44f7-46e8-a094-61d37cbf7a9e",
-                    "path": "<Keyboard>/shift",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AirManuever",
+                    "action": "Restart",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

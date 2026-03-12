@@ -1,6 +1,12 @@
 using UnityEditor.Experimental;
 using UnityEngine;
 
+/*
+This script is called when the car is in the air.
+Here update state will override the default update state and add the logic for the air state.
+Enter state will be called once, you can set the variables to false or true if they are not being called 
+in the update state then their value won't change.
+*/
 public class AirState : CarBaseState
 {
     float pitchForce = 1.5f;

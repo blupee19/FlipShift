@@ -1,5 +1,11 @@
 using UnityEngine;
 
+/*
+This script is called when the car is on the ground.
+Here update state will override the default update state and add the logic for the ground state.
+Enter state will be called once, you can set the variables to false or true if they are not being called 
+in the update state then their value won't change.
+*/
 public class GroundState : CarBaseState
 {
     public override void EnterState(CarMovement car)
@@ -14,6 +20,7 @@ public class GroundState : CarBaseState
         car.Move();
         car.Brake();
         car.Steer();
+        car.Restart();
 
         if (car.jumpInput)
         {

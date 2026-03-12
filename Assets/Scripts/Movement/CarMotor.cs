@@ -2,8 +2,19 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/* 
+Rules to add input
+1. Add a private string to Action Name References with the names in the input action asset you'll put
+2. Add a private InputAction with the name of the action followed by "Action"
+3. Add a public variable (could be float, bool, etc. depending on the action) with the name of the action followed by "Input", add get & set and see if they need to be public or private
+4. In the Awake method, assign the InputAction variable to the inputActions by finding the action map and then the action
+5. In the RegisterInputActions method, add the performed and canceled events to the InputAction variable
+6. In the OnEnable method, enable the InputAction variable
+7. In the OnDisable method, disable the InputAction variable
+*/
 public class CarMotor : MonoBehaviour
 {
+
 
     [Header("Input Action Asset")]
     [SerializeField] private InputActionAsset inputActions;
@@ -16,18 +27,21 @@ public class CarMotor : MonoBehaviour
     [SerializeField] private string steer = "Steer";
     [SerializeField] private string handbrake = "Handbrake";
     [SerializeField] private string jump = "Jump";
+    [SerializeField] private string restart = "Restart";
     //[SerializeField] private string airManuever = "AirManuever";
 
     private InputAction accelerateAction;
     private InputAction steerAction;
     private InputAction handbrakeAction;
     private InputAction jumpAction;
+    private InputAction restartAction;
     //private InputAction airManueverAction;
 
     public float AccelerateInput { get; private set; }
     public float SteerInput { get; private set; }
     public bool HandbrakeInput { get; private set; }
     public bool JumpInput { get; set; }
+    public bool RestartInput { get; set; }
     //public bool AirManuever { get; set; }
 
     public static CarMotor Instance { get; private set; }
@@ -49,6 +63,7 @@ public class CarMotor : MonoBehaviour
         steerAction = inputActions.FindActionMap(actionMapName).FindAction(steer);
         handbrakeAction = inputActions.FindActionMap(actionMapName).FindAction(handbrake);
         jumpAction = inputActions.FindActionMap(actionMapName).FindAction(jump);
+        restartAction = inputActions.FindActionMap(actionMapName).FindAction(restart);
         //airManueverAction = inputActions.FindActionMap(actionMapName).FindAction(airManuever);
         RegisterInputActions();
     }
@@ -67,6 +82,9 @@ public class CarMotor : MonoBehaviour
         jumpAction.performed += context => JumpInput = true;
         jumpAction.canceled += context => JumpInput = false;
 
+        restartAction.performed += context => RestartInput = true;
+        restartAction.canceled += context => RestartInput = false;
+
         //airManueverAction.performed += context => AirManuever = true;
         //airManueverAction.canceled += context => AirManuever = false;
     }
@@ -77,6 +95,7 @@ public class CarMotor : MonoBehaviour
         steerAction.Enable();   
         handbrakeAction.Enable();
         jumpAction.Enable();
+        restartAction.Enable();
         //airManueverAction.Enable();
     }
 
@@ -86,6 +105,7 @@ public class CarMotor : MonoBehaviour
         steerAction.Disable();
         handbrakeAction.Disable();
         jumpAction.Disable();
+        restartAction.Disable();
         //airManueverAction.Disable();
     }
 

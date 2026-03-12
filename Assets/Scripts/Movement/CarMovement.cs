@@ -2,6 +2,10 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
+/* 
+This script is being used for creating all the movement logic for the car.
+Make the functions here and then call them in the State Scripts wherever needed.
+*/
 public class CarMovement : MonoBehaviour
 {
     public CarBaseState currentState;
@@ -45,6 +49,7 @@ public class CarMovement : MonoBehaviour
     public float steerInput;
     public bool jumpInput;
     public bool brakeInput;
+    public bool restartInput;
     // public bool airManueverInput;
 
     public Rigidbody carRb;
@@ -73,12 +78,13 @@ public class CarMovement : MonoBehaviour
 
     void GetInputs()
     {
-        if (CarMotor.Instance == null) return;
+        // if (CarMotor.Instance == null) return;
 
         moveInput = CarMotor.Instance.AccelerateInput;
         steerInput = CarMotor.Instance.SteerInput;
         brakeInput = CarMotor.Instance.HandbrakeInput;
         jumpInput = CarMotor.Instance.JumpInput;
+        restartInput = CarMotor.Instance.RestartInput;
         // airManueverInput = CarMotor.Instance.AirManuever;
     }
 
@@ -217,5 +223,13 @@ public class CarMovement : MonoBehaviour
     {
         currentState = state;
         state.EnterState(this);
+    }
+    public void Restart(){
+        if (restartInput)
+        {
+            Debug.Log("R tapped");
+            transform.position = new Vector3(130.91f, 3.1357f, -33.78f);
+            transform.rotation = Quaternion.Euler(0f, 172f, 0f);
+        }
     }
 }
