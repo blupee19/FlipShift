@@ -122,7 +122,6 @@ public class CarMovement : MonoBehaviour
         {
             wheel.wheelCollider.motorTorque = currentTorque;
         }
-
     }
 
     public void Steer()
@@ -169,8 +168,6 @@ public class CarMovement : MonoBehaviour
             wheel.wheelModel.transform.rotation = rot;
 
         }
-
-
     }
 
     public void CustomGravity()
@@ -192,34 +189,26 @@ public class CarMovement : MonoBehaviour
         }
         //Debug.Log("In Air");
         return false;
-        
     }
-
-
-
     public void InAir()
     {
         foreach(var wheel in wheels)
         {
             wheel.wheelCollider.motorTorque = 0f;
         }
-
         // Debug.Log("Angular velocity dampening");
         // We only want to dampen the Z-axis rotation
         // Get the current angular velocity on the Z axis
         float currentZVelocity = carRb.angularVelocity.z;
         float currentXVelocity = carRb.angularVelocity.x;
-
         // Calculate the damping torque. It's the negative of the current velocity
         // multiplied by our damping factor.
         float dampingTorqueZ = -currentZVelocity * dampingFactor;
         float dampingTorqueX = -currentXVelocity * dampingFactor;
-
         // Apply this torque on the Z axis.
         // We use ForceMode.Acceleration to ignore the object's mass for a more direct damping effect.
         carRb.AddTorque(dampingTorqueX, 0, dampingTorqueZ, ForceMode.Acceleration);
     }
-
     public void SwitchState(CarBaseState state)
     {
         currentState = state;

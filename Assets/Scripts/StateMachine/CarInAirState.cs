@@ -9,7 +9,7 @@ in the update state then their value won't change.
 */
 public class AirState : CarBaseState
 {
-    float pitchForce = 1.5f;
+    float pitchForce = 2f;
     public override void EnterState(CarMovement car)
     {
         Debug.Log("Car is in the air");
