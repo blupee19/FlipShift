@@ -99,24 +99,25 @@ public class CarMovement : MonoBehaviour
             driveWheelCount++;
 
         }
-
+        //here we are counting each of the wheel present and dividing it by the total number of wheels to get the avg RPM
         float avgWheelRPM = (driveWheelCount > 0) ? totalWheelRPM / driveWheelCount : 0;
-
+        //adding 1000 to the avg wheel RPM makes up a realistic engine RPM
         float engineRPM = Mathf.Abs(avgWheelRPM) + 1000f;
 
+        //if the car is going over the top speed, we set the motor torque to 0 to stop the acceleration
         if (carRb.linearVelocity.magnitude > topSpeed)
-        {
+        { 
             foreach (var wheel in wheels)
             {
                 wheel.wheelCollider.motorTorque = 0;
             }
             return;
         }
-
+        //torqueCurveValue is being assigned to the animation curve where the graph is plotting engineRPM and maxRPM
         float torqueCurveValue = torqueCurve.Evaluate(engineRPM / maxRPM);
-
+        //currentTorque drives the car using the product of moveInput, maxAcceleration and torqueCurveValue
         float currentTorque = moveInput * maxAcceleration * torqueCurveValue;
-
+        //now apply that torque to all the four wheels 
         foreach (var wheel in wheels)
         {
             wheel.wheelCollider.motorTorque = currentTorque;
@@ -228,6 +229,7 @@ public class CarMovement : MonoBehaviour
         if (restartInput)
         {
             Debug.Log("R tapped");
+            carRb.linearVelocity = Vector3.zero;
             transform.position = new Vector3(130.91f, 3.1357f, -33.78f);
             transform.rotation = Quaternion.Euler(0f, 172f, 0f);
         }
