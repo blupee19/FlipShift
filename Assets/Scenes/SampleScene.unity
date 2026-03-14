@@ -929,7 +929,6 @@ GameObject:
   - component: {fileID: 542006173}
   - component: {fileID: 542006172}
   - component: {fileID: 542006176}
-  - component: {fileID: 542006177}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -1049,7 +1048,7 @@ Transform:
   m_GameObject: {fileID: 542006171}
   serializedVersion: 2
   m_LocalRotation: {x: 0.021024644, y: 0.9489193, z: -0.3080856, w: 0.064756975}
-  m_LocalPosition: {x: 129.9536, y: 8.095709, z: -26.805265}
+  m_LocalPosition: {x: 129.9536, y: 6.13, z: -26.805265}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1087,18 +1086,6 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
---- !u!114 &542006177
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 542006171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 728e4b9565f50a84eb37e53f36e41f6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &579783332
 GameObject:
   m_ObjectHideFlags: 0
@@ -1264,7 +1251,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9193091905229197031, guid: 5a826e1a9f9a0a74fbf63d825c3e464a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.1357088
+      value: 1.17
       objectReference: {fileID: 0}
     - target: {fileID: 9193091905229197031, guid: 5a826e1a9f9a0a74fbf63d825c3e464a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1435,17 +1422,17 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 1.0047607
-      inSlope: 0.5025635
-      outSlope: 0.5025635
+      inSlope: 0.095992595
+      outSlope: 0.095992595
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1
-      value: 1.5073242
-      inSlope: 0.5025635
-      outSlope: 0.5025635
+      time: 0.9972229
+      value: 1.1004868
+      inSlope: 0.095992595
+      outSlope: 0.095992595
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -1459,12 +1446,15 @@ MonoBehaviour:
   jumpForce: 1700
   topSpeed: 25
   dampingFactor: 2
+  pitchForce: 2
+  rotateForce: 2
   moveInput: 0
   steerInput: 0
+  rollInput: 0
   jumpInput: 0
   brakeInput: 0
   restartInput: 0
-  carRb: {fileID: 0}
+  carRb: {fileID: 599282739}
 --- !u!114 &599282748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1484,6 +1474,7 @@ MonoBehaviour:
   handbrake: Handbrake
   jump: Jump
   restart: Restart
+  roll: Roll
 --- !u!146 &599282750
 WheelCollider:
   m_ObjectHideFlags: 0
@@ -2095,7 +2086,7 @@ Transform:
   m_GameObject: {fileID: 918639324}
   serializedVersion: 2
   m_LocalRotation: {x: 0.021024648, y: 0.9489193, z: -0.30808562, w: 0.06475699}
-  m_LocalPosition: {x: 129.9536, y: 8.095709, z: -26.805265}
+  m_LocalPosition: {x: 129.9536, y: 6.13, z: -26.805265}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

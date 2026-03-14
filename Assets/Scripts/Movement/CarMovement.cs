@@ -42,11 +42,13 @@ public class CarMovement : MonoBehaviour
     [SerializeField] public float jumpForce = 60000f;
     [SerializeField] public float topSpeed = 20f;
     [SerializeField] public float dampingFactor= 5f;
-// hello
+    [SerializeField] public float pitchForce = 4500f;
+    [SerializeField] public float rotateForce = 3000f;
 
 
     public float moveInput;
     public float steerInput;
+    public float rollInput;
     public bool jumpInput;
     public bool brakeInput;
     public bool restartInput;
@@ -74,6 +76,7 @@ public class CarMovement : MonoBehaviour
         CustomGravity();
         velocityUI.text = carRb.linearVelocity.magnitude.ToString("F0");
         State.text = currentState.ToString();
+        Restart();
     }
 
     void GetInputs()
@@ -85,6 +88,7 @@ public class CarMovement : MonoBehaviour
         brakeInput = CarMotor.Instance.HandbrakeInput;
         jumpInput = CarMotor.Instance.JumpInput;
         restartInput = CarMotor.Instance.RestartInput;
+        rollInput = CarMotor.Instance.RollInput;
         // airManueverInput = CarMotor.Instance.AirManuever;
     }
 
@@ -117,6 +121,7 @@ public class CarMovement : MonoBehaviour
         float torqueCurveValue = torqueCurve.Evaluate(engineRPM / maxRPM);
         //currentTorque drives the car using the product of moveInput, maxAcceleration and torqueCurveValue
         float currentTorque = moveInput * maxAcceleration * torqueCurveValue;
+        Debug.Log("Move");
         //now apply that torque to all the four wheels 
         foreach (var wheel in wheels)
         {
@@ -196,18 +201,18 @@ public class CarMovement : MonoBehaviour
         {
             wheel.wheelCollider.motorTorque = 0f;
         }
-        // Debug.Log("Angular velocity dampening");
-        // We only want to dampen the Z-axis rotation
-        // Get the current angular velocity on the Z axis
-        float currentZVelocity = carRb.angularVelocity.z;
-        float currentXVelocity = carRb.angularVelocity.x;
-        // Calculate the damping torque. It's the negative of the current velocity
-        // multiplied by our damping factor.
-        float dampingTorqueZ = -currentZVelocity * dampingFactor;
-        float dampingTorqueX = -currentXVelocity * dampingFactor;
-        // Apply this torque on the Z axis.
-        // We use ForceMode.Acceleration to ignore the object's mass for a more direct damping effect.
-        carRb.AddTorque(dampingTorqueX, 0, dampingTorqueZ, ForceMode.Acceleration);
+        // // Debug.Log("Angular velocity dampening");
+        // // We only want to dampen the Z-axis rotation
+        // // Get the current angular velocity on the Z axis
+        // float currentZVelocity = carRb.angularVelocity.z;
+        // float currentXVelocity = carRb.angularVelocity.x;
+        // // Calculate the damping torque. It's the negative of the current velocity
+        // // multiplied by our damping factor.
+        // float dampingTorqueZ = -currentZVelocity * dampingFactor;
+        // float dampingTorqueX = -currentXVelocity * dampingFactor;
+        // // Apply this torque on the Z axis.
+        // // We use ForceMode.Acceleration to ignore the object's mass for a more direct damping effect.
+        // carRb.AddTorque(dampingTorqueX, 0, dampingTorqueZ, ForceMode.Acceleration);
     }
     public void SwitchState(CarBaseState state)
     {
@@ -221,6 +226,27 @@ public class CarMovement : MonoBehaviour
             carRb.linearVelocity = Vector3.zero;
             transform.position = new Vector3(130.91f, 3.1357f, -33.78f);
             transform.rotation = Quaternion.Euler(0f, 172f, 0f);
+        }
+    }
+
+    public void Pitch(){
+        if (jumpInput){
+            float pitchTorque = moveInput * pitchForce;
+            carRb.AddRelativeTorque(Vector3.right * pitchTorque, ForceMode.Acceleration);
+        }
+    }
+
+    public void Roll(){
+        if (rollInput!=0f){
+            float rotateTorque = rollInput * rotateForce;
+            carRb.AddRelativeTorque(Vector3.back * rotateTorque, ForceMode.Acceleration);
+        }
+    }
+
+    public void Jump(){
+        // can put a delay here to make jumping a power kinda mehcanic
+        if (jumpInput){
+            carRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
     }
 }

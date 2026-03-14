@@ -28,6 +28,7 @@ public class CarMotor : MonoBehaviour
     [SerializeField] private string handbrake = "Handbrake";
     [SerializeField] private string jump = "Jump";
     [SerializeField] private string restart = "Restart";
+    [SerializeField] private string roll = "Roll";
     //[SerializeField] private string airManuever = "AirManuever";
 
     private InputAction accelerateAction;
@@ -35,13 +36,15 @@ public class CarMotor : MonoBehaviour
     private InputAction handbrakeAction;
     private InputAction jumpAction;
     private InputAction restartAction;
+    private InputAction rollAction;
     //private InputAction airManueverAction;
 
     public float AccelerateInput { get; private set; }
     public float SteerInput { get; private set; }
     public bool HandbrakeInput { get; private set; }
     public bool JumpInput { get; set; }
-    public bool RestartInput { get; set; }
+    public bool RestartInput { get; set; }  
+    public float RollInput { get; set; }
     //public bool AirManuever { get; set; }
 
     public static CarMotor Instance { get; private set; }
@@ -64,6 +67,7 @@ public class CarMotor : MonoBehaviour
         handbrakeAction = inputActions.FindActionMap(actionMapName).FindAction(handbrake);
         jumpAction = inputActions.FindActionMap(actionMapName).FindAction(jump);
         restartAction = inputActions.FindActionMap(actionMapName).FindAction(restart);
+        rollAction = inputActions.FindActionMap(actionMapName).FindAction(roll);
         //airManueverAction = inputActions.FindActionMap(actionMapName).FindAction(airManuever);
         RegisterInputActions();
     }
@@ -85,6 +89,9 @@ public class CarMotor : MonoBehaviour
         restartAction.performed += context => RestartInput = true;
         restartAction.canceled += context => RestartInput = false;
 
+        rollAction.performed += context => RollInput = context.ReadValue<float>();
+        rollAction.canceled += context => RollInput = 0;
+
         //airManueverAction.performed += context => AirManuever = true;
         //airManueverAction.canceled += context => AirManuever = false;
     }
@@ -96,6 +103,7 @@ public class CarMotor : MonoBehaviour
         handbrakeAction.Enable();
         jumpAction.Enable();
         restartAction.Enable();
+        rollAction.Enable();
         //airManueverAction.Enable();
     }
 
@@ -106,6 +114,7 @@ public class CarMotor : MonoBehaviour
         handbrakeAction.Disable();
         jumpAction.Disable();
         restartAction.Disable();
+        rollAction.Disable();
         //airManueverAction.Disable();
     }
 

@@ -9,30 +9,28 @@ in the update state then their value won't change.
 */
 public class AirState : CarBaseState
 {
-    float pitchForce = 2f;
     public override void EnterState(CarMovement car)
     {
-        Debug.Log("Car is in the air");
         //CarMotor.Instance.JumpInput = false;
     }
 
     public override void UpdateState(CarMovement car)
     {
-        Debug.Log("AirState Update");
         car.InAir();
         car.Steer();
+        car.Roll();
+        car.Pitch();
         
         if (car.IsGrounded())
         {
             car.SwitchState(car.onGroundState);
         }
 
-        if (car.jumpInput)
-        {
-            Debug.Log("Torque!!!");
-            float pitchTorque = car.moveInput * pitchForce;
-            car.carRb.AddRelativeTorque(Vector3.right * pitchTorque, ForceMode.Acceleration);
-        }
+        // if (car.jumpInput)
+        // {
+        //     float pitchTorque = car.moveInput * car.pitchForce;
+        //     car.carRb.AddRelativeTorque(Vector3.right * pitchTorque, ForceMode.Acceleration);
+        // }
 
     }
 
