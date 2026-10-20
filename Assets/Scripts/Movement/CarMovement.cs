@@ -121,7 +121,7 @@ public class CarMovement : MonoBehaviour
         float torqueCurveValue = torqueCurve.Evaluate(engineRPM / maxRPM);
         //currentTorque drives the car using the product of moveInput, maxAcceleration and torqueCurveValue
         float currentTorque = moveInput * maxAcceleration * torqueCurveValue;
-        Debug.Log("Move");
+        //Debug.Log("Move");
         //now apply that torque to all the four wheels 
         foreach (var wheel in wheels)
         {
@@ -177,7 +177,7 @@ public class CarMovement : MonoBehaviour
 
     public void CustomGravity()
     {
-        if (carRb != null)
+        if (carRb)
         {
             carRb.AddForce(customGravityDirection * gravityMultiplier, ForceMode.Acceleration);
         }

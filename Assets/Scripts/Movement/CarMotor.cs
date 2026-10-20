@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 /* 
+heelo
 Rules to add input
 1. Add a private string to Action Name References with the names in the input action asset you'll put
 2. Add a private InputAction with the name of the action followed by "Action"
